@@ -1,78 +1,72 @@
-# PDF Outline Extractor
+PDF Outline Extractor :- 
+This project is an offline PDF outline extraction system. It intelligently detects titles, headings, and the document structure from a set of PDF files. The solution uses font styles, position data, and NLP techniques to produce a clean outline in structured JSON format.
 
-This solution extracts structured outlines from PDF documents, identifying the title and headings (H1, H2, H3) with their respective page numbers.
+Project Highlights :- 
 
-## Approach
+1. Extracts document title and headings using formatting + NLP
+2. Supports English and Japanese documents (auto-detect language)
+3. Builds a hierarchical outline (H1, H2, H3) using KMeans clustering on font size
+4. Leverages boldness, indentation, and regex patterns for heading detection
+5. Fully offline, no internet or cloud required
+6. Fast multiprocessing-based PDF processing
 
-The solution uses a combination of techniques to extract and classify headings:
+Folder Structure :-
+CHALLENGE_1A/
+│
+├── sample_dataset/
+│ ├── pdfs/ → Input PDFs
+│ └── outputs/ → Output JSONs
+│
+├── process_pdfs.py → Main script to process PDFs
+├── requirements.txt → List of required Python packages
+└── README.md → Project documentation (this file)
 
-1. **Text Extraction**: Uses pdfplumber to extract text with formatting information (font size, position, etc.)
-2. **Title Detection**: Identifies the document title based on font size, position, and NLP analysis
-3. **Heading Detection**: Uses a multi-faceted approach:
-   - Font size clustering to identify heading levels (H1, H2, H3)
-   - Pattern matching for common heading formats
-   - Formatting cues (bold text, capitalization)
-   - NLP analysis for heading-like phrases
-4. **Hierarchical Organization**: Organizes headings into a structured outline
+How to Run :- 
+Option 1 – Run Locally with Python
+Install dependencies
+Ensure Python 3.10+ is installed. Then run:
 
-## Libraries Used
+pip install -r requirements.txt
 
-- **pdfplumber**: For PDF text extraction with formatting information
-- **spaCy**: For NLP analysis to improve heading detection
-- **scikit-learn**: For clustering font sizes to determine heading levels
-- **NumPy**: For numerical operations  and (**time , sys, and kmeans)
+Add your PDF files
+Place all .pdf files in the folder: sample_dataset/pdfs/
 
-## Building and Running
+python process_pdfs.py
 
-### Build the Docker Image
+Output .json files will be created in: sample_dataset/outputs/
 
-```bash
-docker build --platform linux/amd64 -t pdf-outline-extractor:latest .
-```
+Output Format :- 
+Each output file will be a JSON file with the following structure:
 
-### Run the Container
+1. title: Extracted title from the first page
+2. outline: A list of detected headings with the following info:
+3. level: H1, H2, or H3 (based on visual features)
+4. text: The heading text
+5. page: Page number in the document
 
-```bash
-docker run --rm -v $(pwd)/input:/app/input -v $(pwd)/output:/app/output --network none pdf-outline-extractor:latest
-```
 
-This will process all PDF files in the `input` directory and generate corresponding JSON files in the `output` directory.
+System Requirements :- 
 
-## Performance
+1. Python 3.10 or above
+2. Internet (only for installing Python packages, not for execution)
+3. RAM: ≤1GB (suitable for lightweight machines)
+4. No GPU required
+5. Works offline once dependencies are installed
 
-- The solution is optimized to process a 50-page PDF in under 10 seconds
-- The total model size is under 200MB (primarily the spaCy model)
-- The solution works completely offline with no internet access required
+Used Libraries :-
 
-## Multilingual Support
+1. pdfplumber (for PDF parsing)
+2. spaCy (for NLP)
+3. langdetect (for language detection)
+4. scikit-learn (for KMeans clustering)
+5. numpy
 
-The solution provides comprehensive multilingual support:
+Future Enhancements :-
 
-- **Language Detection**: Automatically detects the document language using the langdetect library
-- **Universal Pattern Matching**: Uses language-agnostic patterns that work across different languages
-- **Font Analysis**: Relies on font size clustering and formatting cues which are language-independent
-- **Extensible Framework**: Supports adding language-specific patterns and NLP models
+1. Add content summary under each heading
+2. Integrate semantic analysis using sentence embeddings
+3. Support more languages and larger documents
+4. Build a web interface to upload and view outlines
 
-The solution currently includes the English spaCy model by default, but the architecture allows for easy addition of models for other languages.
-
-## Key Features
-
-1. **Robust Heading Detection**:
-   - Uses font size clustering to identify heading levels
-   - Pattern matching for common heading formats
-   - Formatting cues (bold text, capitalization)
-   - NLP analysis for heading-like phrases
-
-2. **Performance Optimization**:
-   - Processes PDFs efficiently to meet the 10-second constraint
-   - Uses lightweight models to stay under the 200MB limit
-
-3. **Error Handling**:
-   - Gracefully handles various PDF formats and structures
-   - Provides fallback mechanisms when heading detection is challenging
-
-4. **Enhanced Multilingual Support**:
-   - Automatic language detection for optimal processing
-   - Language-specific heading patterns where available
-   - Universal patterns that work across all languages
-   - Font-based analysis that is language-independent
+Docker Hub Repository (if applicable) :-
+https://hub.docker.com/repositories/11222750
