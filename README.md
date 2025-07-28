@@ -69,4 +69,14 @@ Future Enhancements :-
 4. Build a web interface to upload and view outlines
 
 Docker Hub Repository (if applicable) :-
+
+This command follow the make docker image.
+
+docker build -t adobe_doc_analyzer .
+docker tag adobe_doc_analyzer 11222750/challenge_1a:latest
+docker login
+docker push 11222750/challenge_1a:latest
+
 https://hub.docker.com/repositories/11222750
+
+
