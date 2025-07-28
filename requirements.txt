@@ -1,0 +1,6 @@
+pdfplumber
+numpy
+spacy
+langdetect
+scikit-learn
+PyMuPDF==1.22.3
